@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import AuthContext from "../context/Auth";
+import jwt_decode from "jwt-decode";
 
 function Navbar() {
+  const { user, logoutUser } = useContext(AuthContext);
+
+  const token = localStorage.getItem("authTokens");
+
+  if (token) {
+    const decode = jwt_decode(token);
+
+    var user_id = decode.user_id;
+  }
+
   return (
     <nav className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -60,18 +72,33 @@ function Navbar() {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                <Link
-                  className=" text-white rounded-md px-3 py-2 text-sm font-medium active:bg-gray-900"
-                  to="/login"
-                >
-                  Login
-                </Link>
-                <Link
-                  className="text-gray-300 hover:bg-gray-700 active:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
-                  to="/register"
-                >
-                  Register
-                </Link>
+
+                {token == null ? (
+                  <>
+                    <Link
+                      className=" text-white rounded-md px-3 py-2 text-sm font-medium active:bg-gray-900"
+                      to="/login"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      className="text-gray-300 hover:bg-gray-700 active:bg-gray-900 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                      to="/register"
+                    >
+                      Register
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      className="bg-blue-500 rounded p-1  text-white"
+                      onClick={logoutUser}
+                    >
+                      Logout
+                    </Link>
+                  </>
+                )}
+
                 {/* <a
                   href="#"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"

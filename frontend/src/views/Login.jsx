@@ -1,6 +1,18 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import AuthContext from "../context/Auth";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { loginUser } = useContext(AuthContext);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    loginUser(email, password);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
       <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -9,7 +21,7 @@ function Login() {
             Sign in to your account
           </h1>
 
-          <form className="space-y-4 md:space-y-6">
+          <form className="space-y-4 md:space-y-6" onSubmit={onSubmit}>
             <div>
               <label
                 htmlFor="email"
@@ -21,6 +33,8 @@ function Login() {
                 type="email"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placehoder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 id="email"
                 required
                 placeholder="name@company.com"
@@ -38,6 +52,8 @@ function Login() {
                 type="password"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placehoder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 id="password"
                 required
                 placeholder="**********"
