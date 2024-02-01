@@ -9,9 +9,11 @@ const baseURL = "http://127.0.0.1:8000/api";
 const useAxios = () => {
   const { authToken, setUser, setAuthToken } = useContext(AuthContext);
 
+  console.log(authToken);
+
   const axiosInstance = axios.create({
     baseURL,
-    headers: { Authorization: `Bearer ${authToken?.access}` },
+    headers: { Authorization: `Bearer ${authToken.access}` },
   });
 
   axiosInstance.interceptors.request.use(async (req) => {
@@ -22,15 +24,18 @@ const useAxios = () => {
       return req;
     }
 
-    const response = await axios.post(`${baseURL}/token/refresh`, {
-      refresh: authToken.refresh,
-    });
+    const response = await axios.post(
+      `http://127.0.0.1:8000/api/token/refresh/`,
+      {
+        refresh: authToken.refresh,
+      }
+    );
 
     localStorage.setItem("authTokens", JSON.stringify(response.data));
     // localStorage.setItem("authTokens", JSON.stringify(response.data));
 
     setAuthToken(response.data);
-    setUser(jwt_decode(response.data.access));
+    setUser(response.data.access);
 
     req.headers.Authorization = `Bearer ${response.data.access}`;
 

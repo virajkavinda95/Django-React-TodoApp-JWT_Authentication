@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(() =>
     localStorage.getItem("authTokens")
-      ? jwt_decode(localStorage.getItem("authTokens"))
+      ? JSON.parse(localStorage.getItem("authTokens"))
       : null
   );
 
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       console.log("Logged in");
 
       setAuthToken(data);
-      setUser(jwt_decode(data.access));
+      setUser(data.access);
       localStorage.setItem("authTokens", JSON.stringify(data));
       navigate("/dashboard");
     } else {
